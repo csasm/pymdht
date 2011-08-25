@@ -364,7 +364,7 @@ class Controller:
             peers = self._tracker.get(msg.info_hash)
             logger.critical('Got GET_PEERS: %r' % msg.info_hash)
             if peers:
-                logger.critical('RESPONDING with PEERS: %r' % msg.hash)
+                logger.critical('RESPONDING with PEERS: %r' % msg.info_hash)
             return message.OutgoingGetPeersResponse(msg.src_node,
                                                     self._my_id,
                                                     token,

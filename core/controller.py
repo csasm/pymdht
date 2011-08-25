@@ -360,14 +360,17 @@ class Controller:
             #TODO: return the closest rnodes to the target instead of the 8
             #first in the bucket.
             peers = self._tracker.get(msg.info_hash)
+            logger.critical('Got GET_PEERS: %d' % msg.info_hash)
             if peers:
-                logger.debug('RESPONDING with PEERS:\n%r' % peers)
+                logger.critical('RESPONDING with PEERS:\n%r' % peers)
             return message.OutgoingGetPeersResponse(msg.src_node,
                                                     self._my_id,
                                                     token,
                                                     nodes=rnodes,
                                                     peers=peers)
-        elif msg.query == message.ANNOUNCE_PEER:
+        elif msg.query == message.ANNOUNCE_PEER: 
+            logger.critical('Got ANNOUNCE %d' % msg.info_hash)
+            #FIXME: check token
             peer_addr = (msg.src_addr[0], msg.bt_port)
             self._tracker.put(msg.info_hash, peer_addr)
             return message.OutgoingAnnouncePeerResponse(msg.src_node,

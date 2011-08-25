@@ -342,8 +342,10 @@ class Controller:
     
     def _get_response(self, msg):
         if msg.query == message.PING:
+#            logger.critical('Got P')
             return message.OutgoingPingResponse(msg.src_node, self._my_id)
         elif msg.query == message.FIND_NODE:
+#            logger.critical('Got FN')
             log_distance = msg.target.log_distance(self._my_id)
             rnodes = self._routing_m.get_closest_rnodes(log_distance,
                                                         NUM_NODES, False)
@@ -360,16 +362,16 @@ class Controller:
             #TODO: return the closest rnodes to the target instead of the 8
             #first in the bucket.
             peers = self._tracker.get(msg.info_hash)
-            logger.critical('Got GET_PEERS: %d' % msg.info_hash)
+            logger.critical('Got GET_PEERS: %r' % msg.info_hash)
             if peers:
-                logger.critical('RESPONDING with PEERS:\n%r' % peers)
+                logger.critical('RESPONDING with PEERS: %r' % msg.hash)
             return message.OutgoingGetPeersResponse(msg.src_node,
                                                     self._my_id,
                                                     token,
                                                     nodes=rnodes,
                                                     peers=peers)
         elif msg.query == message.ANNOUNCE_PEER: 
-            logger.critical('Got ANNOUNCE %d' % msg.info_hash)
+            logger.critical('Got ANNOUNCE %r' % msg.info_hash)
             #FIXME: check token
             peer_addr = (msg.src_addr[0], msg.bt_port)
             self._tracker.put(msg.info_hash, peer_addr)
